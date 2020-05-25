@@ -1,138 +1,36 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Primer: Designing a health-check API - Karthik Muralidharan</title><meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta property="og:title" content="Primer: Designing a health-check API" />
-<meta property="og:description" content="If you are working on a web application, be it a monolith, micro-service or even serverless architecture, you should be able to find out very easily whether your application is healthy or not, and if it isn&rsquo;t, then it shouldn&rsquo;t be serving any traffic at all." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="http://karthikm.dev/posts/designing-a-healthcheck-api/" />
-<meta property="article:published_time" content="2017-12-29T02:01:58+05:30" />
-<meta property="article:modified_time" content="2017-12-29T02:01:58+05:30" />
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Primer: Designing a health-check API"/>
-<meta name="twitter:description" content="If you are working on a web application, be it a monolith, micro-service or even serverless architecture, you should be able to find out very easily whether your application is healthy or not, and if it isn&rsquo;t, then it shouldn&rsquo;t be serving any traffic at all."/>
-<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300" rel="stylesheet">
-
-	<link rel="stylesheet" type="text/css" media="screen" href="http://karthikm.dev/css/normalize.css" />
-	<link rel="stylesheet" type="text/css" media="screen" href="http://karthikm.dev/css/main.css" /><link rel="stylesheet" type="text/css" href="http://karthikm.dev/css/dark.css"  />
-
-	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-	<script src="http://karthikm.dev/js/main.js"></script>
-</head>
-
-<body>
-	<div class="container wrapper post">
-		<div class="header">
-	<base href="http://karthikm.dev/">
-	<h1 class="site-title"><a href="http://karthikm.dev/">Karthik Muralidharan</a></h1>
-	<div class="site-description"><h2>Ramblings of a simpleton programmer</h2><nav class="nav social">
-			<ul class="flat"><a href="https://github.com/karthikmuralidharan" title="Github"><i data-feather="github"></i></a><a href="https://twitter.com/_karthikm" title="Twitter"><i data-feather="twitter"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
-		</nav>
-	</div>
-
-	<nav class="nav">
-		<ul class="flat">
-			
-			<li>
-				<a href="/">Home</a>
-			</li>
-			
-			<li>
-				<a href="/posts">Posts</a>
-			</li>
-			
-			<li>
-				<a href="/about">About</a>
-			</li>
-			
-		</ul>
-	</nav>
-</div>
-
-
-		<div class="post-header">
-			<h1 class="title">Primer: Designing a health-check API</h1>
-			<div class="meta">Dec 29, 2017</div>
-		</div>
-
-		<div class="markdown">
-			<p>If you are working on a web application, be it a monolith, micro-service or even serverless architecture, you should be able to find out very easily whether your application is healthy or not, and if it isn&rsquo;t, then it shouldn&rsquo;t be serving any traffic at all. Implementing a simple health-check API will allow you to do just that.</p>
-<h2 id="why-do-we-needit">Why do we need it?</h2>
-<p>It informs the load balancer distributing traffic to your application or a service discovery (a registry that among other things may periodically checks health of the application hosts) that your application running on a specific host will be unable to serve traffic when it&rsquo;s unhealthy. If found unhealthy, a load balancer may take that host running the application out of rotation, or in case of a service discovery, web service query using DNS will omit the unhealthy host.
-In case of some weird behaviour with the application on a specific host, you could take that host out of rotation manually, so that you can debug the application without having to shut down the process.</p>
-<h2 id="design-considerations">Design Considerations</h2>
-<p>Always check if any of your core application dependencies are failing and return an HTTP status code of 503 (Service Unavailable) along with a list of errors raised by the failing dependencies. 
+<!doctype html><html><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><title>Primer: Designing a health-check API - Karthik Muralidharan</title><meta name=viewport content="width=device-width,initial-scale=1"><meta property="og:title" content="Primer: Designing a health-check API"><meta property="og:description" content="If you are working on a web application, be it a monolith, micro-service or even serverless architecture, you should be able to find out very easily whether your application is healthy or not, and if it isn&rsquo;t, then it shouldn&rsquo;t be serving any traffic at all."><meta property="og:type" content="article"><meta property="og:url" content="http://karthikm.dev/posts/designing-a-healthcheck-api/"><meta property="article:published_time" content="2017-12-29T02:01:58+05:30"><meta property="article:modified_time" content="2017-12-29T02:01:58+05:30"><meta name=twitter:card content="summary"><meta name=twitter:title content="Primer: Designing a health-check API"><meta name=twitter:description content="If you are working on a web application, be it a monolith, micro-service or even serverless architecture, you should be able to find out very easily whether your application is healthy or not, and if it isn&rsquo;t, then it shouldn&rsquo;t be serving any traffic at all."><link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300" rel=stylesheet><link rel=stylesheet type=text/css media=screen href=http://karthikm.dev/css/normalize.css><link rel=stylesheet type=text/css media=screen href=http://karthikm.dev/css/main.css><link rel=stylesheet type=text/css href=http://karthikm.dev/css/dark.css><script src=https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js></script><script src=http://karthikm.dev/js/main.js></script></head><body><div class="container wrapper post"><div class=header><base href=http://karthikm.dev/><h1 class=site-title><a href=http://karthikm.dev/>Karthik Muralidharan</a></h1><div class=site-description><h2>Ramblings of a simpleton programmer</h2><nav class="nav social"><ul class=flat><a href=https://github.com/karthikmuralidharan title=Github><i data-feather=github></i></a><a href=https://twitter.com/_karthikm title=Twitter><i data-feather=twitter></i></a><a href=/index.xml title=RSS><i data-feather=rss></i></a></ul></nav></div><nav class=nav><ul class=flat><li><a href=/>Home</a></li><li><a href=/posts>Posts</a></li><li><a href=/about>About</a></li></ul></nav></div><div class=post-header><h1 class=title>Primer: Designing a health-check API</h1><div class=meta>Dec 29, 2017</div></div><div class=markdown><p>If you are working on a web application, be it a monolith, micro-service or even serverless architecture, you should be able to find out very easily whether your application is healthy or not, and if it isn&rsquo;t, then it shouldn&rsquo;t be serving any traffic at all. Implementing a simple health-check API will allow you to do just that.</p><h2 id=why-do-we-needit>Why do we need it?</h2><p>It informs the load balancer distributing traffic to your application or a service discovery (a registry that among other things may periodically checks health of the application hosts) that your application running on a specific host will be unable to serve traffic when it&rsquo;s unhealthy. If found unhealthy, a load balancer may take that host running the application out of rotation, or in case of a service discovery, web service query using DNS will omit the unhealthy host.
+In case of some weird behaviour with the application on a specific host, you could take that host out of rotation manually, so that you can debug the application without having to shut down the process.</p><h2 id=design-considerations>Design Considerations</h2><p>Always check if any of your core application dependencies are failing and return an HTTP status code of 503 (Service Unavailable) along with a list of errors raised by the failing dependencies. 
 Eg: connection to a database, invalid S3 credential, low disk space (if your application saves files temporarily to disk).
-Health-check endpoints are called frequently and within fixed intervals, therefore your latencies should ideally be small. Enforce an overall upper bound for your health-check response and make sure to cancel any pending checks to the downstream dependencies in case of timeout.</p>
-<p>If you are performing multiple dependency checks over the network, try to process them concurrently, if possible, to reduce the overall response time.</p>
-<p>As mentioned previously, providing the ability to toggle traffic for a specific host can help in debugging the app on the host without having to shut the process down. </p>
-<p>Eg: A simple file existence check on the host is one traditional approach.
-By default, any core dependency error leads to a 503 HTTP status code. But certain dependencies failures may not completely make our application non-operational(e.g. metrics service, external service failures, etc.). For such failures, we should be able to simply observe the errors in the API response without having to take the host out of rotation, but still be captured in logs for alerts.</p>
-<hr>
-<p>I created a simple library that returns an HTTP handler implementing the health-check API for Go based web services.</p>
-<p>The library defines a Checker interface that takes in a context.Context object which is used for signalling request cancellation to the checker functions in case of timeout/request cancellation and returns an error in case if any were detected.
-You can define your own custom implementation of the checker and inject it while creating the handler.</p>
-<div class="highlight"><pre style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#268bd2">type</span> Checker <span style="color:#268bd2">interface</span> {
-    <span style="color:#268bd2">Check</span>(ctx context.Context) <span style="color:#dc322f">error</span>
+Health-check endpoints are called frequently and within fixed intervals, therefore your latencies should ideally be small. Enforce an overall upper bound for your health-check response and make sure to cancel any pending checks to the downstream dependencies in case of timeout.</p><p>If you are performing multiple dependency checks over the network, try to process them concurrently, if possible, to reduce the overall response time.</p><p>As mentioned previously, providing the ability to toggle traffic for a specific host can help in debugging the app on the host without having to shut the process down. </p><p>Eg: A simple file existence check on the host is one traditional approach.
+By default, any core dependency error leads to a 503 HTTP status code. But certain dependencies failures may not completely make our application non-operational(e.g. metrics service, external service failures, etc.). For such failures, we should be able to simply observe the errors in the API response without having to take the host out of rotation, but still be captured in logs for alerts.</p><hr><p>I created a simple library that returns an HTTP handler implementing the health-check API for Go based web services.</p><p>The library defines a Checker interface that takes in a context.Context object which is used for signalling request cancellation to the checker functions in case of timeout/request cancellation and returns an error in case if any were detected.
+You can define your own custom implementation of the checker and inject it while creating the handler.</p><div class=highlight><pre style=color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#268bd2>type</span> Checker <span style=color:#268bd2>interface</span> {
+    <span style=color:#268bd2>Check</span>(ctx context.Context) <span style=color:#dc322f>error</span>
 }
-<span style="color:#268bd2">type</span> CheckerFunc <span style="color:#268bd2">func</span>(ctx context.Context) <span style="color:#dc322f">error</span>
-</code></pre></div><p>The library uses functional options to accept optional arguments during initiation of the HTTP Handler for overall timeout, observers and custom checkers.</p>
-<div class="highlight"><pre style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#586e75">// For the sake of brevity, error check is being omitted here.
-</span><span style="color:#586e75"></span>db, _ <span style="color:#719e07">:=</span> sql.<span style="color:#268bd2">Open</span>(<span style="color:#2aa198">&#34;mysql&#34;</span>, <span style="color:#2aa198">&#34;user:password@/dbname&#34;</span>)
-<span style="color:#719e07">defer</span> db.<span style="color:#268bd2">Close</span>()
-r <span style="color:#719e07">:=</span> mux.<span style="color:#268bd2">NewRouter</span>()
-r.<span style="color:#268bd2">Handle</span>(<span style="color:#2aa198">&#34;/healthcheck&#34;</span>, healthcheck.<span style="color:#268bd2">Handler</span>(
-    <span style="color:#586e75">// WithTimeout option allows you to set a max overall timeout
-</span><span style="color:#586e75"></span>    healthcheck.<span style="color:#268bd2">WithTimeout</span>(<span style="color:#2aa198">5</span><span style="color:#719e07">*</span>time.Second),
-    <span style="color:#586e75">// Checkers fail the status in case of any error.
-</span><span style="color:#586e75"></span>    healthcheck.<span style="color:#268bd2">WithChecker</span>(
-        <span style="color:#2aa198">&#34;database&#34;</span>, healthcheck.<span style="color:#268bd2">CheckerFunc</span>(
-            <span style="color:#268bd2">func</span>(ctx context.Context) <span style="color:#dc322f">error</span> {
-                <span style="color:#719e07">return</span> db.<span style="color:#268bd2">PingContext</span>(ctx)
+<span style=color:#268bd2>type</span> CheckerFunc <span style=color:#268bd2>func</span>(ctx context.Context) <span style=color:#dc322f>error</span>
+</code></pre></div><p>The library uses functional options to accept optional arguments during initiation of the HTTP Handler for overall timeout, observers and custom checkers.</p><div class=highlight><pre style=color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#586e75>// For the sake of brevity, error check is being omitted here.
+</span><span style=color:#586e75></span>db, _ <span style=color:#719e07>:=</span> sql.<span style=color:#268bd2>Open</span>(<span style=color:#2aa198>&#34;mysql&#34;</span>, <span style=color:#2aa198>&#34;user:password@/dbname&#34;</span>)
+<span style=color:#719e07>defer</span> db.<span style=color:#268bd2>Close</span>()
+r <span style=color:#719e07>:=</span> mux.<span style=color:#268bd2>NewRouter</span>()
+r.<span style=color:#268bd2>Handle</span>(<span style=color:#2aa198>&#34;/healthcheck&#34;</span>, healthcheck.<span style=color:#268bd2>Handler</span>(
+    <span style=color:#586e75>// WithTimeout option allows you to set a max overall timeout
+</span><span style=color:#586e75></span>    healthcheck.<span style=color:#268bd2>WithTimeout</span>(<span style=color:#2aa198>5</span><span style=color:#719e07>*</span>time.Second),
+    <span style=color:#586e75>// Checkers fail the status in case of any error.
+</span><span style=color:#586e75></span>    healthcheck.<span style=color:#268bd2>WithChecker</span>(
+        <span style=color:#2aa198>&#34;database&#34;</span>, healthcheck.<span style=color:#268bd2>CheckerFunc</span>(
+            <span style=color:#268bd2>func</span>(ctx context.Context) <span style=color:#dc322f>error</span> {
+                <span style=color:#719e07>return</span> db.<span style=color:#268bd2>PingContext</span>(ctx)
             },
         ),
     ),
-    <span style="color:#586e75">// Observers do not fail the status in case of error.
-</span><span style="color:#586e75"></span>    healthcheck.<span style="color:#268bd2">WithObserver</span>(
-        <span style="color:#2aa198">&#34;diskspace&#34;</span>, checkers.<span style="color:#268bd2">DiskSpace</span>(<span style="color:#2aa198">&#34;/var/log&#34;</span>, <span style="color:#2aa198">90</span>),
+    <span style=color:#586e75>// Observers do not fail the status in case of error.
+</span><span style=color:#586e75></span>    healthcheck.<span style=color:#268bd2>WithObserver</span>(
+        <span style=color:#2aa198>&#34;diskspace&#34;</span>, checkers.<span style=color:#268bd2>DiskSpace</span>(<span style=color:#2aa198>&#34;/var/log&#34;</span>, <span style=color:#2aa198>90</span>),
     ),
 ))
-</code></pre></div><p>In case of an error from the database, you should see the following response with the status code 503.</p>
-<div class="highlight"><pre style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#268bd2">&#34;status&#34;</span>: <span style="color:#2aa198">&#34;Service Unavailable&#34;</span>,
-  <span style="color:#268bd2">&#34;errors&#34;</span>: {
-    <span style="color:#268bd2">&#34;database&#34;</span>: <span style="color:#2aa198">&#34;dial tcp 127.0.0.1:3306: getsockopt: connection refused&#34;</span>
+</code></pre></div><p>In case of an error from the database, you should see the following response with the status code 503.</p><div class=highlight><pre style=color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#268bd2>&#34;status&#34;</span>: <span style=color:#2aa198>&#34;Service Unavailable&#34;</span>,
+  <span style=color:#268bd2>&#34;errors&#34;</span>: {
+    <span style=color:#268bd2>&#34;database&#34;</span>: <span style=color:#2aa198>&#34;dial tcp 127.0.0.1:3306: getsockopt: connection refused&#34;</span>
   }
 }
-</code></pre></div><p>A more complete example is provided in the <a href="https://github.com/etherlabsio/healthcheck">GitHub page</a>. Please do check it out and help us make it better with your contributions.</p>
-
-		</div>
-
-		<div class="post-tags">
-			
-				
-					<nav class="nav tags">
-							<ul class="flat">
-								
-								<li><a href="/tags/healthcheck">healthcheck</a></li>
-								
-								<li><a href="/tags/microservices">microservices</a></li>
-								
-							</ul>
-					</nav>
-				
-			
-		</div>
-		</div>
-	<div class="footer wrapper">
-	<nav class="nav">
-		<div> Contact me at me@karthikm.dev </div>
-	</nav>
-</div>
-
-
-
-<script>feather.replace()</script>
-</body>
-</html>
+</code></pre></div><p>A more complete example is provided in the <a href=https://github.com/etherlabsio/healthcheck>GitHub page</a>. Please do check it out and help us make it better with your contributions.</p></div><div class=post-tags><nav class="nav tags"><ul class=flat><li><a href=/tags/healthcheck>healthcheck</a></li><li><a href=/tags/microservices>microservices</a></li></ul></nav></div></div><div class="footer wrapper"><nav class=nav><div>Contact me at me@karthikm.dev</div></nav></div><script>feather.replace()</script></body></html>

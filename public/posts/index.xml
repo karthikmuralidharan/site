@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Karthik Muralidharan</title>
+    <link>http://karthikm.dev/posts/</link>
+    <description>Recent content in Posts on Karthik Muralidharan</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Contact me at me@karthikm.dev</copyright>
+    <lastBuildDate>Fri, 29 Dec 2017 02:01:58 +0530</lastBuildDate>
+    
+	<atom:link href="http://karthikm.dev/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Primer: Designing a health-check API</title>
+      <link>http://karthikm.dev/posts/designing-a-healthcheck-api/</link>
+      <pubDate>Fri, 29 Dec 2017 02:01:58 +0530</pubDate>
+      
+      <guid>http://karthikm.dev/posts/designing-a-healthcheck-api/</guid>
+      <description>If you are working on a web application, be it a monolith, micro-service or even serverless architecture, you should be able to find out very easily whether your application is healthy or not, and if it isn&amp;rsquo;t, then it shouldn&amp;rsquo;t be serving any traffic at all.</description>
+    </item>
+    
+  </channel>
+</rss>

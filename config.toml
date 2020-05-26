@@ -1,13 +1,12 @@
-baseURL = "https://karthikm.dev/"
+baseURL = "/"
 languageCode = "en-us"
 title = "Karthik Muralidharan"
 
 theme = "ezhil"
 
-copyright = "Contact me at me@karthikm.dev"
+copyright = "Reach me at [me at karthikm dot dev]"
 
 # Enable syntax highlighting.
-pygmentsstyle = "solarized-dark"
 pygmentscodefences = true
 pygmentscodefencesguesssyntax = true
 
@@ -19,7 +18,7 @@ summaryLength = 20
 
 [params]
     # Blog subtitle which appears below blog title. Supports markdown.
-    subtitle = "Ramblings of a simpleton programmer"
+    subtitle = "Ramblings of a daft programmer"
 
     # Content types which are included in home page recent posts list.
     mainSections = ["posts"]

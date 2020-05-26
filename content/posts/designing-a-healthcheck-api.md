@@ -2,6 +2,7 @@
 title: "Primer: Designing a health-check API"
 date: 2017-12-29T02:01:58+05:30
 tags: [healthcheck, microservices]
+draft: false
 ---
 
 If you are working on a web application, be it a monolith, micro-service or even serverless architecture, you should be able to find out very easily whether your application is healthy or not, and if it isn't, then it shouldn't be serving any traffic at all. Implementing a simple health-check API will allow you to do just that.

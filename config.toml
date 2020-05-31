@@ -56,6 +56,11 @@ weight = 3
 # Social media links which shows up on site header.
 # Uses feather icons for icons. You can [search icon names from here](https://feathericons.com/).
 [[params.social]]
+name = "LinkedIn"
+icon = "linkedin"
+url = "https://www.linkedin.com/in/karthikmuralidharan/"
+
+[[params.social]]
 name = "Github"
 icon = "github"
 url = "https://github.com/karthikmuralidharan"

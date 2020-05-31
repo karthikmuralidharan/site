@@ -4,7 +4,7 @@ date: 2020-05-25T21:37:58+05:30
 type: "page"
 ---
 
-{{< figure src="/images/me.jpg" title="My Aura Personified"  width=50% >}}
+{{< figure src="/images/me.jpg" title="Aura personified"  width=50% >}}
 
 
 A full-stack software engineer in Bengaluru. I'm currently work as a backend engineer at Atlassian. 

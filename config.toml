@@ -4,7 +4,7 @@ title = "Karthik Muralidharan"
 
 theme = "ezhil"
 
-copyright = "Reach me at [me at karthikm dot dev]"
+copyright = "Reach out at [me at karthikm dot dev]"
 
 # Enable syntax highlighting.
 pygmentscodefences = true
@@ -18,7 +18,7 @@ summaryLength = 20
 
 [params]
     # Blog subtitle which appears below blog title. Supports markdown.
-    subtitle = "Ramblings of a daft programmer"
+    subtitle = "Ramblings of a foolish programmer"
 
     # Content types which are included in home page recent posts list.
     mainSections = ["posts"]
